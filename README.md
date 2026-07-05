@@ -1,4 +1,4 @@
-# SentinelX-Platform
+# HoneypotIntel
 
 A modular SOC (Security Operations Center) honeypot and threat intelligence platform built for incident response and attack analysis.
 
