@@ -1,0 +1,47 @@
+[
+  {
+    "incident_id": "INC-205-210-31-154",
+    "detection_type": "PORT_SCAN",
+    "source_ip": "205.210.31.154",
+    "severity": "LOW",
+    "timestamp": "2026-07-05T02:21:15.844518Z",
+    "automated_actions": [
+      "LOG_ALERT: Port scan detected",
+      "WHITELIST_CHECK: 205.210.31.154 (check if known/trusted)",
+      "ENRICHMENT: Query threat intelligence for 205.210.31.154",
+      "MONITOR: Watch for follow-up exploitation attempts"
+    ],
+    "recommended_response": "Monitor - No immediate action needed (LOW severity)",
+    "status": "OPEN"
+  },
+  {
+    "incident_id": "INC-94-231-206-249",
+    "detection_type": "PORT_SCAN",
+    "source_ip": "94.231.206.249",
+    "severity": "LOW",
+    "timestamp": "2026-07-05T02:40:22.549674Z",
+    "automated_actions": [
+      "LOG_ALERT: Port scan detected",
+      "WHITELIST_CHECK: 94.231.206.249 (check if known/trusted)",
+      "ENRICHMENT: Query threat intelligence for 94.231.206.249",
+      "MONITOR: Watch for follow-up exploitation attempts"
+    ],
+    "recommended_response": "Monitor - No immediate action needed (LOW severity)",
+    "status": "OPEN"
+  },
+  {
+    "incident_id": "INC-91-230-168-251",
+    "detection_type": "PORT_SCAN",
+    "source_ip": "91.230.168.251",
+    "severity": "LOW",
+    "timestamp": "2026-07-05T02:43:32.850026Z",
+    "automated_actions": [
+      "LOG_ALERT: Port scan detected",
+      "WHITELIST_CHECK: 91.230.168.251 (check if known/trusted)",
+      "ENRICHMENT: Query threat intelligence for 91.230.168.251",
+      "MONITOR: Watch for follow-up exploitation attempts"
+    ],
+    "recommended_response": "Monitor - No immediate action needed (LOW severity)",
+    "status": "OPEN"
+  }
+]
