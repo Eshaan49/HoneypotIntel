@@ -1,325 +1,218 @@
 # HoneypotIntel
 
-> **A complete, production-ready SOC platform combining cloud honeypot deployment, automated threat intelligence enrichment, intelligent detection engineering, and incident response automation.**
+> **A live, cloud-hosted SSH honeypot with an automated threat intelligence pipeline — running unattended on AWS, catching real internet attack traffic, and surfacing genuine malware deployment attempts.**
 
-![Status](https://img.shields.io/badge/Status-COMPLETE-brightgreen)
+![Status](https://img.shields.io/badge/Status-LIVE-brightgreen)
 ![Python](https://img.shields.io/badge/Python-3.11+-blue)
 ![License](https://img.shields.io/badge/License-MIT-green)
 ![Platform](https://img.shields.io/badge/Platform-AWS-orange)
 
+📄 **[Read the case study: catching a live malware deployment attempt →](./CASE_STUDY.md)**
+
 ---
 
-## 📋 Table of Contents
+## Table of Contents
 
 - [Overview](#overview)
-- [Project Status](#project-status)
+- [Live Results](#live-results)
+- [Featured Finding: Malware Deployment Attempt](#featured-finding-malware-deployment-attempt)
 - [Architecture](#architecture)
-- [Features](#features)
-- [Real-World Results](#real-world-results)
+- [Dashboard](#dashboard)
+- [Pipeline Phases](#pipeline-phases)
 - [Installation](#installation)
-- [Usage](#usage)
 - [Project Structure](#project-structure)
 - [Technologies](#technologies)
-- [Future Roadmap](#future-roadmap)
+- [Roadmap](#roadmap)
 - [Author](#author)
 
 ---
 
-## 🎯 Overview
+## Overview
 
-**HoneypotIntel** is a complete Security Operations Center (SOC) platform that demonstrates:
+**HoneypotIntel** is a Security Operations Center (SOC) platform built around a real, internet-facing SSH honeypot. It's not a simulation or a course exercise — it's a live decoy server on AWS that has been catching genuine attack traffic from strangers scanning the internet, continuously, for weeks.
 
 - ✅ Cloud infrastructure deployment (AWS EC2)
 - ✅ Live threat capture (Cowrie SSH honeypot)
-- ✅ Threat intelligence integration (AbuseIPDB API)
+- ✅ Automated threat intelligence enrichment (AbuseIPDB API)
 - ✅ Custom detection rule development
 - ✅ Automated incident response playbooks
 - ✅ Executive-level threat reporting
-
-**Real-world attack data**: Captures actual internet reconnaissance from malicious actors, not simulated scenarios.
-
----
-
-## 🚀 Project Status: ALL PHASES COMPLETE ✓
-
-| Phase | Name | Status | Description |
-|-------|------|--------|-------------|
-| 1 | Honeypot Deployment | ✅ COMPLETE | Cowrie SSH honeypot on AWS EC2 (3.110.222.106:2222) |
-| 2 | Threat Intelligence | ✅ COMPLETE | AbuseIPDB enrichment + GeoIP analysis |
-| 3 | Detection Engineering | ✅ COMPLETE | Custom detection rules for port scans & version probes |
-| 4 | Lightweight Automation | ✅ COMPLETE | Automated incident response playbooks |
-| 5 | Reporting & Polish | ✅ COMPLETE | Executive reports + incident summaries |
+- ✅ Custom real-time dashboard (Flask + Plotly)
+- ✅ Fully automated pipeline — no manual intervention required
 
 ---
 
-## 🏗️ Architecture
-INTERNET ATTACKERS
-                       ↓
-              AWS EC2 (ap-south-1)
-                3.110.222.106:2222
-                       ↓
-          [Phase 1] Cowrie SSH Honeypot
-                ↓
-       JSON Attack Logs (var/log/cowrie/)
-                ↓
+## Live Results
 
-[Phase 2] Threat Intelligence Enrichment
-├─ AbuseIPDB IP Reputation Scoring
-├─ GeoIP Location Analysis
-└─ Output: enriched_attacks.csv
-↓
-[Phase 3] Detection Engine (detection_rules.py)
-├─ Port Scan Detection
-├─ Version Probe Identification
-├─ Brute Force Pattern Matching
-└─ Output: incident classifications
-↓
-[Phase 4] Automated Response (automation.py)
-├─ Incident Creation
-├─ Playbook Execution
-├─ Action Logging
-└─ Output: incidents.json
-↓
-[Phase 5] Reporting (reporting.py)
-├─ Executive Summary
-├─ Incident Details
-├─ Recommendations
-└─ Output: EXECUTIVE_REPORT.md
-
----
-
-## 🎁 Key Features
-
-### **Phase 1: Honeypot Deployment**
-- Cowrie SSH honeypot on AWS EC2 t3.micro (Free Tier)
-- Captures all SSH reconnaissance attempts
-- Real internet attacks (not simulated)
-- Logs stored in JSON format for programmatic analysis
-
-### **Phase 2: Threat Intelligence Enrichment**
-- Integrates with AbuseIPDB API for IP reputation
-- Queries MaxMind GeoIP for geolocation
-- Enriches raw attack data with metadata
-- Outputs clean CSV for analysis
-
-### **Phase 3: Detection Engineering**
-- Custom detection rules based on attack patterns
-- Identifies port scans (quick connect/disconnect)
-- Classifies attack severity
-- Generates incident IDs automatically
-
-### **Phase 4: Lightweight Automation**
-- Executes response playbooks per attack type
-- Automates whitelisting checks
-- Triggers threat intelligence queries
-- Logs all automated actions
-
-### **Phase 5: Reporting & Polish**
-- Auto-generates executive summaries
-- Creates incident reports with metadata
-- Tracks incident status (OPEN/CLOSED)
-- Provides analyst recommendations
-
----
-
-## 📊 Real-World Results
-
-### **Captured Attacks (First 24 Hours)**
+Real numbers, captured by the honeypot, updated automatically every night:
 
 | Metric | Value |
-|--------|-------|
-| Total Sessions | 10+ |
-| Unique Attacker IPs | 10 |
-| Attack Types Detected | 6 |
-| Incidents Generated | 3 |
-| False Positive Rate | 0% |
-| Detection Latency | < 1 second |
+|---|---|
+| Connections logged | 2,000+ |
+| Unique attacker IPs | 950+ |
+| Scored critical (AbuseIPDB 90–100) | 85.5% |
+| Cumulative abuse reports across all IPs | 229,000+ |
+| Origin countries | 28 |
+| Interactive command sessions (past automated scanning) | 16 |
+| Honeypot uptime | 18+ days and counting |
 
-### **Attack Examples**
-
-INC-205-210-31-154 | PORT_SCAN | LOW    | 2026-07-05T02:21:15Z
-INC-94-231-206-249 | PORT_SCAN | LOW    | 2026-07-05T02:40:22Z
-INC-91-230-168-251 | PORT_SCAN | LOW    | 2026-07-05T02:43:32Z
-
-
-**Source IPs:** Brazil, Russia, China (traced via GeoIP)
+Most traffic is automated background noise — bots trying default credentials and moving on. The small fraction that goes further is where things get interesting. See the [case study](./CASE_STUDY.md) for the full breakdown.
 
 ---
 
-## 📦 Installation
+## Featured Finding: Malware Deployment Attempt
 
-### **Prerequisites**
+On **July 18**, an attacker at `47.237.30.186` went past credential-stuffing and attempted a real, multi-stage payload deployment: a probing command, a `curl`/`wget` download of a binary with a fallback strategy, `chmod +x` and execution, a staged credential file, and UPX-packing artifacts consistent with antivirus evasion.
+
+Because it ran inside Cowrie's simulated shell, nothing was actually compromised — but every command was logged in full.
+
+**[→ Full technical breakdown with the actual logged commands](./CASE_STUDY.md)**
+
+---
+
+## Architecture
+
+```
+                    INTERNET ATTACKERS
+                            ↓
+                  AWS EC2 (ap-south-1)
+                   3.110.222.106:2222
+                            ↓
+                Cowrie SSH Honeypot
+                            ↓
+          JSON attack logs (/opt/cowrie/var/log/cowrie/)
+                            ↓
+        ┌───────────────────────────────────┐
+        │   cron (daily, 2:00 AM UTC)        │
+        │   → enrichment.py                  │
+        │     • Parses all rotated logs      │
+        │     • Queries AbuseIPDB per IP      │
+        │     • Writes enriched_attacks.csv  │
+        └───────────────────────────────────┘
+                            ↓
+        ┌───────────────────────────────────┐
+        │   Flask dashboard (local/live)     │
+        │   → auto-fetches over SSH          │
+        │     (paramiko), 5-min cache        │
+        │   → renders charts + top offenders │
+        │     table + live command feed      │
+        └───────────────────────────────────┘
+                            ↓
+     detection_rules.py → automation.py → reporting.py
+     (pattern detection → incident playbooks → exec report)
+```
+
+The entire loop — capture, enrichment, and dashboard refresh — runs unattended. No manual `scp` or script triggering required.
+
+---
+
+## Dashboard
+
+A custom-built Flask + Plotly dashboard visualizes the honeypot's data in real time: connection volume over time, threat-confidence distribution, origin countries, event composition, a ranked top-offenders table, and a live feed of interactive attacker sessions.
+
+*(Add a screenshot of the dashboard here — this is one of the most convincing things a visitor can see in 3 seconds.)*
+
+---
+
+## Pipeline Phases
+
+| Phase | Component | What it does |
+|---|---|---|
+| 1 | Honeypot Deployment | Cowrie SSH honeypot on AWS EC2, capturing real internet reconnaissance |
+| 2 | Threat Intelligence | `enrichment.py` — enriches every unique attacker IP against AbuseIPDB |
+| 3 | Detection Engineering | `detection_rules.py` — flags port scans, version probes, brute-force patterns |
+| 4 | Automated Response | `automation.py` — executes response playbooks, logs actions, generates incidents |
+| 5 | Reporting | `reporting.py` — generates executive summaries and incident reports |
+| 6 | Visualization | Custom Flask/Plotly dashboard, auto-synced from the honeypot over SSH |
+
+---
+
+## Installation
+
+### Prerequisites
 - Python 3.11+
 - AWS account (Free Tier eligible)
-- AbuseIPDB API key (free)
+- AbuseIPDB API key (free tier)
 - Git
 
-### **Quick Start**
+### Quick Start
 
-1. **Clone repository**
 ```bash
 git clone https://github.com/Eshaan49/HoneypotIntel.git
 cd HoneypotIntel
+pip install -r requirements.txt
 ```
 
-2. **Install dependencies**
+Set your AbuseIPDB key as an environment variable (never hardcode it):
+
 ```bash
-pip3.11 install requests
+export ABUSEIPDB_API_KEY="your_key_here"
 ```
 
-3. **Configure AbuseIPDB API key**
+Run the pipeline manually, or rely on the included cron schedule for daily automated runs:
+
 ```bash
-# Edit enrichment.py and automation.py
-# Replace ABUSEIPDB_API_KEY with your actual key
-```
-
-4. **Run the pipeline**
-```bash
-# Threat intelligence enrichment
-python3.11 enrichment.py
-
-# Detection rules
-python3.11 detection_rules.py
-
-# Automated response
-python3.11 automation.py
-
-# Generate reports
-python3.11 reporting.py
+python3 enrichment.py       # Threat intelligence enrichment
+python3 detection_rules.py  # Detection engine
+python3 automation.py       # Automated incident response
+python3 reporting.py        # Executive report generation
 ```
 
 ---
 
-## 🔧 Usage
+## Project Structure
 
-### **enrichment.py** — Threat Intelligence Enrichment
-Parses Cowrie logs and enriches attacker IPs with AbuseIPDB data.
-
-```bash
-python3.11 enrichment.py
 ```
-
-**Output:** `enriched_attacks.csv`
-- IP Address
-- Abuse Confidence Score
-- Total Reports
-- Country of Origin
-- ISP Information
-
-### **detection_rules.py** — Detection Engine
-Identifies attack patterns from Cowrie sessions.
-
-```bash
-python3.11 detection_rules.py
-```
-
-**Detects:**
-- Port scans (quick connect/disconnect)
-- Version probes
-- Brute force attempts
-
-### **automation.py** — Automated Response
-Executes response playbooks for each detection.
-
-```bash
-python3.11 automation.py
-```
-
-**Output:** `incidents.json`
-- Automated actions taken
-- Incident severity
-- Recommended analyst response
-
-### **reporting.py** — Executive Reporting
-Generates professional incident reports.
-
-```bash
-python3.11 reporting.py
-```
-
-**Output:** `EXECUTIVE_REPORT.md`
-- Summary of all incidents
-- Attack metrics
-- Security findings
-- Recommendations
-
----
-
-## 📁 Project Structure
-
 HoneypotIntel/
-├── README.md                    # This file
-├── enrichment.py               # Phase 2: Threat intelligence
-├── detection_rules.py          # Phase 3: Detection engine
-├── automation.py               # Phase 4: Automated response
-├── reporting.py                # Phase 5: Report generation
-├── enriched_attacks.csv        # Real attack data (enriched)
-├── incidents.json              # Generated incidents
-└── EXECUTIVE_REPORT.md         # Auto-generated report
+├── README.md
+├── CASE_STUDY.md           # Malware deployment finding — full write-up
+├── enrichment.py           # Phase 2: threat intelligence enrichment
+├── detection_rules.py      # Phase 3: detection engine
+├── automation.py           # Phase 4: automated response
+├── reporting.py            # Phase 5: report generation
+├── enriched_attacks.csv    # Real attack data (enriched)
+├── incidents.json          # Generated incidents
+├── EXECUTIVE_REPORT.md     # Auto-generated report
+└── wazuh_integration.py    # Early scaffold for a planned SIEM integration (see Roadmap)
+```
 
 ---
 
-## 🛠️ Technologies Used
+## Technologies
 
 | Component | Technology | Purpose |
-|-----------|-----------|---------|
-| Honeypot | Cowrie 3.0.6 | SSH attack capture |
+|---|---|---|
+| Honeypot | Cowrie | SSH attack capture |
 | Cloud | AWS EC2 (t3.micro) | Production deployment |
 | Enrichment | AbuseIPDB API | IP reputation scoring |
+| Scheduling | cron | Nightly automated enrichment |
+| Dashboard | Flask, Plotly, pandas, paramiko | Real-time visualization, auto-sync over SSH |
 | Scripting | Python 3.11 | Automation & analysis |
-| Version Control | Git/GitHub | Portfolio showcase |
 
 ---
 
-## 🚀 Future Enhancements (Phase 6+)
+## Roadmap
 
-- [ ] **Dashboard**: Grafana visualization of real-time attacks
-- [ ] **Wazuh Integration**: Feed honeypot data to SIEM
-- [ ] **Slack Alerts**: Real-time notifications for critical incidents
-- [ ] **Multi-Service Honeypot**: HTTP, FTP, SMTP capture
-- [ ] **Machine Learning**: Anomaly detection on attack patterns
-- [ ] **VirusTotal Integration**: Deep analysis of attacker infrastructure
-- [ ] **Geographic Heat Map**: Visualize global attack sources
+- [ ] **Public dashboard deployment** — currently runs locally, auto-syncing from the honeypot; deploying it publicly is next
+- [ ] **Wazuh SIEM integration** — `wazuh_integration.py` is an early scaffold from before the project pivoted to a custom dashboard for faster iteration. Revisiting this is planned as a follow-up to demonstrate correlation-rule-based detection with an industry-standard SIEM.
+- [ ] **Multi-service honeypot** — extend beyond SSH to HTTP/FTP/SMTP
+- [ ] **Geographic heat map** of attack sources
 
 ---
 
-## 📚 Learning Outcomes
+## Author
 
-This project demonstrates proficiency in:
-- ✅ Cloud infrastructure (AWS)
-- ✅ Security tool deployment (Honeypot)
-- ✅ Threat intelligence integration (API calls)
-- ✅ Detection engineering (custom rules)
-- ✅ Incident response automation
-- ✅ Data analysis & reporting
-- ✅ Python scripting
-- ✅ DevOps/infrastructure as code
-
----
-
-## 👨‍💻 Author
-
-**Eshaan Pilar**  
-SOC Analyst | Security Engineer | Portfolio Project  
+**Eshaan Pilar**
+Final-year Cybersecurity Engineering student · Building toward a SOC Analyst role
 [GitHub](https://github.com/Eshaan49) | [LinkedIn]
 
 ---
 
-## 📄 License
+## License
 
-MIT License - See LICENSE file for details
-
----
-
-## 🤝 Contributing
-
-This is a portfolio project. For questions or suggestions:
-1. Open an issue
-2. Submit a pull request
-3. Contact via GitHub
+MIT License — see LICENSE file for details.
 
 ---
 
-**Last Updated:** July 5, 2026  
-**Status:** Production Ready ✅  
-**Next Phase:** Wazuh Integration
+**Last updated:** July 22, 2026
+**Status:** Live, running unattended with daily automated enrichment
