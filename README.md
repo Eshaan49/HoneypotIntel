@@ -159,18 +159,19 @@ python3 reporting.py        # Executive report generation
 
 ## Project Structure
 
+```
 HoneypotIntel/
 ├── README.md
-├── CASE_STUDY.md # Malware deployment finding — full write-up
-├── enrichment.py # Phase 2: threat intelligence enrichment
-├── detection_rules.py # Phase 3: detection engine
-├── automation.py # Phase 4: automated response
-├── reporting.py # Phase 5: report generation
-├── enriched_attacks.csv # Real attack data (enriched)
-├── incidents.json # Generated incidents
-├── EXECUTIVE_REPORT.md # Auto-generated report
-└── wazuh_integration.py # Early scaffold for a planned SIEM integration (see Roadmap)
----
+├── CASE_STUDY.md           # Malware deployment finding — full write-up
+├── enrichment.py           # Phase 2: threat intelligence enrichment
+├── detection_rules.py      # Phase 3: detection engine
+├── automation.py           # Phase 4: automated response
+├── reporting.py            # Phase 5: report generation
+├── enriched_attacks.csv    # Real attack data (enriched)
+├── incidents.json          # Generated incidents
+├── EXECUTIVE_REPORT.md     # Auto-generated report
+└── wazuh_integration.py    # Early scaffold for a planned SIEM integration (see Roadmap)
+```
 
 ## Technologies
 
