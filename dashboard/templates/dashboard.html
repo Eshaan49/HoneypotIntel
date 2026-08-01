@@ -1,0 +1,153 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>HoneypotIntel — Live Threat Radar</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;600;700&family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+
+<div class="scanlines" aria-hidden="true"></div>
+
+<header class="topbar">
+  <div class="brand">
+    <span class="brand-mark" aria-hidden="true"></span>
+    <span class="brand-name">HONEYPOT<span class="brand-accent">/INTEL</span></span>
+  </div>
+  <div class="topbar-right">
+    <div class="fetch-status" id="fetch-status">
+      <span id="fetch-status-text">Establishing link…</span>
+    </div>
+    <button class="refresh-btn" id="refresh-btn" onclick="manualRefresh()">↻ Refresh</button>
+    <div class="sensor-pill">
+      <span class="dot" aria-hidden="true"></span> SENSOR ACTIVE — <span id="sensor-ip">3.110.222.106:2222</span>
+    </div>
+  </div>
+</header>
+
+<main>
+
+  <section class="hero">
+    <div class="hero-copy">
+      <p class="eyebrow">COWRIE SSH HONEYPOT · LIVE AWS DEPLOYMENT</p>
+      <h1>Every ping<br>gets a signature.</h1>
+      <p class="hero-desc">
+        A decoy server sits exposed on the open internet, logging every connection attempt
+        that reaches it. Each source is cross-referenced against AbuseIPDB's abuse history —
+        the radar shows what's arrived most recently, and how dangerous it looks.
+      </p>
+      <div class="hero-legend">
+        <span class="legend-item"><i class="dot dot-crit"></i> critical</span>
+        <span class="legend-item"><i class="dot dot-warn"></i> unscored / scanning</span>
+        <span class="legend-item"><i class="dot dot-clean"></i> clean</span>
+      </div>
+    </div>
+
+    <div class="radar-wrap">
+      <div class="radar-frame">
+        <div id="radar-mount"></div>
+        <div class="radar-readout">
+          <span class="radar-readout-value" id="radar-count">—</span>
+          <span class="radar-readout-label">tracked contacts</span>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="stat-strip" id="stat-strip">
+    <div class="stat"><span class="stat-value" id="stat-connections">0</span><span class="stat-label">Connections logged</span></div>
+    <div class="stat"><span class="stat-value" id="stat-ips">0</span><span class="stat-label">Unique attacker IPs</span></div>
+    <div class="stat stat-crit"><span class="stat-value" id="stat-critical">0%</span><span class="stat-label">Scored critical (90+)</span></div>
+    <div class="stat"><span class="stat-value" id="stat-reports">0</span><span class="stat-label">Cumulative abuse reports</span></div>
+    <div class="stat"><span class="stat-value" id="stat-countries">0</span><span class="stat-label">Origin countries</span></div>
+    <div class="stat"><span class="stat-value" id="stat-commands">0</span><span class="stat-label">Interactive commands</span></div>
+  </section>
+
+  <section class="panel-grid">
+    <div class="panel panel-wide">
+      <div class="panel-head">
+        <h2>Connections / day</h2>
+        <p>Session volume across the sensor's uptime</p>
+      </div>
+      <div id="chart-timeline" class="chart-body"></div>
+    </div>
+
+    <div class="panel">
+      <div class="panel-head">
+        <h2>Threat confidence</h2>
+        <p>AbuseIPDB score distribution</p>
+      </div>
+      <div id="chart-donut" class="chart-body"></div>
+    </div>
+
+    <div class="panel">
+      <div class="panel-head">
+        <h2>Origin countries</h2>
+        <p>Top 10 by attacker count</p>
+      </div>
+      <div id="chart-countries" class="chart-body"></div>
+    </div>
+
+    <div class="panel">
+      <div class="panel-head">
+        <h2>Event composition</h2>
+        <p>What the honeypot actually logged</p>
+      </div>
+      <div id="chart-events" class="chart-body"></div>
+    </div>
+  </section>
+
+  <section class="panel">
+    <div class="panel-head">
+      <h2>Top offenders</h2>
+      <p>Ranked by prior abuse reports on record</p>
+    </div>
+    <div class="table-wrap">
+      <table class="offenders-table" id="offenders-table">
+        <thead>
+          <tr><th>IP</th><th>Score</th><th>Reports</th><th>Country</th><th>ISP / Provider</th><th>Attempts</th></tr>
+        </thead>
+        <tbody id="offenders-body"></tbody>
+      </table>
+    </div>
+  </section>
+
+  <section class="panel" id="commands-panel" style="display:none;">
+    <div class="panel-head">
+      <h2>Hands on keyboard</h2>
+      <p>Commands typed inside the fake shell — the rare cases past automated scanning</p>
+    </div>
+    <div class="table-wrap">
+      <table class="commands-table" id="commands-table">
+        <thead>
+          <tr><th>Timestamp (UTC)</th><th>Source IP</th><th>Command</th></tr>
+        </thead>
+        <tbody id="commands-body"></tbody>
+      </table>
+    </div>
+  </section>
+
+  <section class="terminal-panel">
+    <div class="terminal-head">
+      <div class="terminal-dots"><span></span><span></span><span></span></div>
+      <span class="terminal-title">live_sessions.log</span>
+    </div>
+    <div class="terminal-body" id="terminal-body">
+      <div class="terminal-line dim">// awaiting session data…</div>
+    </div>
+  </section>
+
+</main>
+
+<footer>
+  HoneypotIntel · Cowrie + AbuseIPDB · generated <span id="gen-time">—</span>
+</footer>
+
+<script src="https://cdn.plot.ly/plotly-2.35.2.min.js"></script>
+<script src="{{ url_for('static', filename='app.js') }}"></script>
+</body>
+</html>
