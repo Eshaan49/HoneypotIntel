@@ -71,30 +71,31 @@ Because it ran inside Cowrie's simulated shell, nothing was actually compromised
 ---
 
 ## Architecture
-INTERNET ATTACKERS
+
+                INTERNET ATTACKERS
                         ↓
               AWS EC2 (ap-south-1)
                3.110.222.106:2222
                         ↓
-            Cowrie SSH Honeypot
+              Cowrie SSH Honeypot
                         ↓
-      JSON attack logs (/opt/cowrie/var/log/cowrie/)
+     JSON attack logs (/opt/cowrie/var/log/cowrie/)
                         ↓
-    ┌───────────────────────────────────┐
-    │   cron (daily, 2:00 AM UTC)        │
-    │   → enrichment.py                  │
-    │     • Parses all rotated logs      │
-    │     • Queries AbuseIPDB per IP      │
-    │     • Writes enriched_attacks.csv  │
-    └───────────────────────────────────┘
+      ┌───────────────────────────────────┐
+      │   cron (daily, 2:00 AM UTC)        │
+      │   → enrichment.py                  │
+      │     • Parses all rotated logs      │
+      │     • Queries AbuseIPDB per IP     │
+      │     • Writes enriched_attacks.csv  │
+      └───────────────────────────────────┘
                         ↓
-    ┌───────────────────────────────────┐
-    │   Flask dashboard (local/live)     │
-    │   → auto-fetches over SSH          │
-    │     (paramiko), 5-min cache        │
-    │   → renders charts + top offenders │
-    │     table + live command feed      │
-    └───────────────────────────────────┘
+      ┌───────────────────────────────────┐
+      │   Flask dashboard (local/live)     │
+      │   → auto-fetches over SSH          │
+      │     (paramiko), 5-min cache        │
+      │   → renders charts + top offenders │
+      │     table + live command feed      │
+      └───────────────────────────────────┘
                         ↓
  detection_rules.py → automation.py → reporting.py
  (pattern detection → incident playbooks → exec report)
@@ -157,6 +158,7 @@ python3 reporting.py        # Executive report generation
 ---
 
 ## Project Structure
+
 HoneypotIntel/
 ├── README.md
 ├── CASE_STUDY.md # Malware deployment finding — full write-up
