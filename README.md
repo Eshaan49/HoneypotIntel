@@ -82,24 +82,24 @@ Because it ran inside Cowrie's simulated shell, nothing was actually compromised
      JSON attack logs (/opt/cowrie/var/log/cowrie/)
                         ↓
       ┌───────────────────────────────────┐
-      │   cron (daily, 2:00 AM UTC)        │
-      │   → enrichment.py                  │
-      │     • Parses all rotated logs      │
-      │     • Queries AbuseIPDB per IP     │
-      │     • Writes enriched_attacks.csv  │
+      │   cron (daily, 2:00 AM UTC)       │
+      │   → enrichment.py                 │
+      │     • Parses all rotated logs     │
+      │     • Queries AbuseIPDB per IP    │
+      │     • Writes enriched_attacks.csv │
       └───────────────────────────────────┘
                         ↓
       ┌───────────────────────────────────┐
-      │   Flask dashboard (local/live)     │
-      │   → auto-fetches over SSH          │
-      │     (paramiko), 5-min cache        │
-      │   → renders charts + top offenders │
-      │     table + live command feed      │
+      │   Flask dashboard (local/live)    │
+      │   → auto-fetches over SSH         │
+      │     (paramiko), 5-min cache       │
+      │   → renders charts + top offenders│
+      │     table + live command feed     │
       └───────────────────────────────────┘
                         ↓
- detection_rules.py → automation.py → reporting.py
- (pattern detection → incident playbooks → exec report)
- The entire loop — capture, enrichment, and dashboard refresh — runs unattended. No manual `scp` or script triggering required.
+     detection_rules.py → automation.py → reporting.py
+     (pattern detection → incident playbooks → exec report)
+     The entire loop — capture, enrichment, and dashboard refresh — runs unattended. No manual `scp` or script triggering required.
 
 ---
 
