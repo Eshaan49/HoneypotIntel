@@ -104,6 +104,8 @@ Because it ran inside Cowrie's simulated shell, nothing was actually compromised
 ---
 
 ## Dashboard
+<img width="1763" height="4655" alt="image" src="https://github.com/user-attachments/assets/81b1d039-b6c6-4271-b12f-df929db10a94" />
+
 
 A custom-built Flask + Plotly dashboard visualizes the honeypot's data in real time: connection volume over time, threat-confidence distribution, origin countries, event composition, a ranked top-offenders table, and a live feed of interactive attacker sessions.
 
@@ -199,7 +201,7 @@ HoneypotIntel/
 
 **Eshaan Pilar**
 Final-year Cybersecurity Engineering student · Building toward a SOC Analyst role
-[GitHub](https://github.com/Eshaan49) | [LinkedIn]
+[GitHub](https://github.com/Eshaan49) | [LinkedIn](https://linkedin.com/in/eshaanpilar)
 
 ---
 
