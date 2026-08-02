@@ -109,7 +109,6 @@ Because it ran inside Cowrie's simulated shell, nothing was actually compromised
 
 A custom-built Flask + Plotly dashboard visualizes the honeypot's data in real time: connection volume over time, threat-confidence distribution, origin countries, event composition, a ranked top-offenders table, and a live feed of interactive attacker sessions.
 
-*(Add a screenshot of the dashboard here — this is one of the most convincing things a visitor can see in 3 seconds.)*
 
 ---
 
